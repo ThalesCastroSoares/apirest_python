@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from .models import DadosPessoais
 
-class DadosPessoaisSerializer(serializers.MoldelSerializer):
+class DadosPessoaisSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DadosPessoais
