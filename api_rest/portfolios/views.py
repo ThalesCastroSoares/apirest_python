@@ -32,16 +32,25 @@ class PortfolioListView(APIView):
             return Response({"message": "403 Forbidden"},
                             status=status.HTTP_409_CONFLICT)
 
-
 class PortfolioView(APIView):
     def get(self, request, pk, format=None):
         user = DadosPessoais.objects.get(pk=pk)
         serializer = DadosPessoaisSerializer(user)
         return Response(serializer.data)
 
-
     def delete(self, request, pk, format=None):
         user = DadosPessoais.objects.get(pk=pk)
         DadosPessoais.delete(user)
         return Response({"message": "Usuario deletado"},
                             status = status.HTTP_200_OK)
+
+    def put(self, request, pk, format=None):
+        user=DadosPessoais.objects.get(pk=pk)
+        serializer = DadosPessoaisSerializer(user, data=request.data, partial = True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,
+                            status = status.HTTP_202_ACCEPTED)
+        else:
+            return Response({"message":"404 error"},
+                            status=status.HTTP_406_NOT_ACCEPTABLE)
